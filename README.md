@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # FitForge
 
 FitForge is a full-stack, no-equipment fitness web app built for people who cannot go to the gym and still want a serious, motivating training system at home.
@@ -294,3 +295,7 @@ npm --prefix frontend run preview
 - Workout, meal, badge, quote, challenge, and sample-user data are shared from `shared/fitnessData.js`.
 - Logged-in users persist progress, custom workouts, reminders, friends, and challenges in MongoDB.
 - Leaderboards are separated by fitness level and ranked by streak first, then total workouts.
+=======
+# fitforge
+this is website that help you to do workout at home without any equipment 
+>>>>>>> d5319b7b11ae34fa268c3c0a87034da86a04cbf4
