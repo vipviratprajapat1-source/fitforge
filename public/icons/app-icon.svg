@@ -1,0 +1,22 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="512" height="512" rx="144" fill="#060916"/>
+  <rect x="40" y="40" width="432" height="432" rx="124" fill="url(#paint0_linear)" fill-opacity="0.12" stroke="url(#paint1_linear)" stroke-width="2"/>
+  <path d="M164 352V160H342V204H214V240H328V282H214V352H164Z" fill="#F5F9FF"/>
+  <path d="M292 160H348L268 352H216L292 160Z" fill="url(#paint2_linear)"/>
+  <defs>
+    <linearGradient id="paint0_linear" x1="88" y1="76" x2="404" y2="428" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6EA8FF"/>
+      <stop offset="0.52" stop-color="#22E4B7"/>
+      <stop offset="1" stop-color="#FF9D60"/>
+    </linearGradient>
+    <linearGradient id="paint1_linear" x1="60" y1="52" x2="456" y2="460" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6EA8FF" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#22E4B7" stop-opacity="0.4"/>
+    </linearGradient>
+    <linearGradient id="paint2_linear" x1="348" y1="160" x2="216" y2="352" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6EA8FF"/>
+      <stop offset="0.55" stop-color="#22E4B7"/>
+      <stop offset="1" stop-color="#FF9D60"/>
+    </linearGradient>
+  </defs>
+</svg>

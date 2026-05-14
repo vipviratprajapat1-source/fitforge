@@ -1,0 +1,497 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum FitnessGoal {
+  FAT_LOSS
+  MUSCLE_GAIN
+  RECOMPOSITION
+  ENDURANCE
+  WELLNESS
+}
+
+enum FitnessLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  ELITE
+}
+
+enum MuscleGroup {
+  FULL_BODY
+  UPPER_BODY
+  LOWER_BODY
+  CORE
+  PUSH
+  PULL
+  LEGS
+  BACK
+  CHEST
+  SHOULDERS
+  ARMS
+  GLUTES
+  CARDIO
+  MOBILITY
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+  SNACK
+  PRE_WORKOUT
+  POST_WORKOUT
+}
+
+enum ThemeMode {
+  SYSTEM
+  LIGHT
+  DARK
+}
+
+enum ActivityType {
+  WORKOUT
+  HYDRATION
+  NUTRITION
+  SLEEP
+  PROGRESS
+  CHALLENGE
+  SOCIAL
+}
+
+enum GoalMetric {
+  WATER
+  CALORIES
+  PROTEIN
+  WORKOUTS
+  SLEEP
+  STEPS
+}
+
+enum NotificationType {
+  SYSTEM
+  ACHIEVEMENT
+  REMINDER
+  SOCIAL
+  CHALLENGE
+}
+
+enum ChallengeType {
+  WORKOUTS
+  STEPS
+  CALORIES
+  HYDRATION
+  SLEEP
+  MINDFULNESS
+}
+
+model User {
+  id                  String               @id @default(cuid())
+  name                String
+  username            String               @unique
+  email               String               @unique
+  passwordHash        String
+  image               String?
+  bio                 String?
+  location            String?
+  age                 Int?
+  heightCm            Float?
+  currentWeightKg     Float?
+  targetWeightKg      Float?
+  fitnessGoal         FitnessGoal          @default(WELLNESS)
+  fitnessLevel        FitnessLevel         @default(BEGINNER)
+  xp                  Int                  @default(0)
+  level               Int                  @default(1)
+  dailyCalorieGoal    Int                  @default(2200)
+  dailyProteinGoal    Int                  @default(140)
+  dailyWaterGoalMl    Int                  @default(3000)
+  dailySleepGoalHours Float                @default(8)
+  isPublic            Boolean              @default(true)
+  onboardingCompleted Boolean              @default(false)
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  settings            UserSettings?
+  workouts            WorkoutRoutine[]     @relation("RoutineOwner")
+  favoriteWorkouts    FavoriteWorkout[]
+  activityLogs        ActivityLog[]
+  nutritionEntries    NutritionEntry[]
+  mealPlans           MealPlan[]
+  dailyMetrics        DailyMetric[]
+  progressEntries     ProgressEntry[]
+  transformationPhotos TransformationPhoto[]
+  achievements        UserAchievement[]
+  posts               Post[]
+  comments            Comment[]
+  likes               Like[]
+  following           Follow[]             @relation("following")
+  followers           Follow[]             @relation("followers")
+  challengeEntries    ChallengeEntry[]
+  notifications       Notification[]
+  missions            UserMissionProgress[]
+  streak              Streak?
+  resetTokens         PasswordResetToken[]
+}
+
+model UserSettings {
+  id                    String    @id @default(cuid())
+  userId                String    @unique
+  theme                 ThemeMode @default(SYSTEM)
+  emailNotifications    Boolean   @default(true)
+  pushNotifications     Boolean   @default(true)
+  workoutReminders      Boolean   @default(true)
+  nutritionReminders    Boolean   @default(true)
+  challengeAlerts       Boolean   @default(true)
+  weeklyDigest          Boolean   @default(true)
+  publicProfile         Boolean   @default(true)
+  shareActivity         Boolean   @default(true)
+  showTransformation    Boolean   @default(true)
+  reducedMotion         Boolean   @default(false)
+  soundEffects          Boolean   @default(true)
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Exercise {
+  id                String             @id @default(cuid())
+  slug              String             @unique
+  name              String
+  description       String
+  instructions      String
+  tips              String?
+  benefits          String?
+  category          String
+  muscleGroup       MuscleGroup
+  difficulty        Difficulty
+  equipment         String
+  durationMinutes   Int
+  caloriesPerMinute Float
+  videoUrl          String?
+  imageUrl          String?
+  tags              String
+  isFeatured        Boolean            @default(false)
+  createdAt         DateTime           @default(now())
+  routineItems      WorkoutRoutineItem[]
+}
+
+model WorkoutRoutine {
+  id                String              @id @default(cuid())
+  userId            String?
+  slug              String              @unique
+  title             String
+  description       String
+  category          String
+  difficulty        Difficulty
+  durationMinutes   Int
+  estimatedCalories Int
+  focusArea         String
+  coverImage        String?
+  musicUrl          String?
+  isTemplate        Boolean             @default(false)
+  isPublished       Boolean             @default(false)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  owner             User?               @relation("RoutineOwner", fields: [userId], references: [id], onDelete: SetNull)
+  items             WorkoutRoutineItem[]
+  favorites         FavoriteWorkout[]
+  sessions          ActivityLog[]
+}
+
+model WorkoutRoutineItem {
+  id              String         @id @default(cuid())
+  routineId       String
+  exerciseId      String
+  sortOrder       Int
+  sets            Int?
+  reps            String?
+  durationSeconds Int?
+  restSeconds     Int?
+  notes           String?
+  routine         WorkoutRoutine @relation(fields: [routineId], references: [id], onDelete: Cascade)
+  exercise        Exercise       @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+
+  @@unique([routineId, sortOrder])
+}
+
+model FavoriteWorkout {
+  id        String         @id @default(cuid())
+  userId    String
+  routineId String
+  createdAt DateTime       @default(now())
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  routine   WorkoutRoutine @relation(fields: [routineId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, routineId])
+}
+
+model ActivityLog {
+  id             String         @id @default(cuid())
+  userId         String
+  routineId      String?
+  type           ActivityType   @default(WORKOUT)
+  title          String
+  note           String?
+  date           DateTime
+  durationMinutes Int?
+  caloriesBurned Int?
+  waterMl        Int?
+  sleepHours     Float?
+  steps          Int?
+  xpEarned       Int            @default(0)
+  completed      Boolean        @default(true)
+  createdAt      DateTime       @default(now())
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  routine        WorkoutRoutine? @relation(fields: [routineId], references: [id], onDelete: SetNull)
+}
+
+model NutritionEntry {
+  id            String    @id @default(cuid())
+  userId        String
+  date          DateTime
+  mealType      MealType
+  name          String
+  calories      Int
+  protein       Float
+  carbs         Float
+  fat           Float
+  fiber         Float?
+  quantity      Float
+  unit          String
+  barcode       String?
+  isIndianFood  Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model MealPlan {
+  id           String    @id @default(cuid())
+  userId       String
+  title        String
+  mealType     MealType
+  date         DateTime
+  itemsSummary String
+  calories     Int
+  protein      Float
+  carbs        Float
+  fat          Float
+  notes        String?
+  aiGenerated  Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model DailyMetric {
+  id               String   @id @default(cuid())
+  userId           String
+  date             DateTime
+  waterMl          Int      @default(0)
+  sleepHours       Float    @default(0)
+  steps            Int      @default(0)
+  weightKg         Float?
+  caloriesConsumed Int      @default(0)
+  caloriesBurned   Int      @default(0)
+  moodScore        Int?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+model ProgressEntry {
+  id         String   @id @default(cuid())
+  userId     String
+  date       DateTime
+  weightKg   Float?
+  bodyFat    Float?
+  chestCm    Float?
+  waistCm    Float?
+  hipsCm     Float?
+  armsCm     Float?
+  thighsCm   Float?
+  notes      String?
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TransformationPhoto {
+  id        String   @id @default(cuid())
+  userId    String
+  stage     String
+  imageData String
+  caption   String?
+  date      DateTime
+  isPublic  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Achievement {
+  id               String            @id @default(cuid())
+  slug             String            @unique
+  name             String
+  description      String
+  icon             String
+  tier             String
+  xpReward         Int
+  requirementType  String
+  requirementValue Int
+  createdAt        DateTime          @default(now())
+  users            UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime    @default(now())
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+}
+
+model DailyMission {
+  id          String              @id @default(cuid())
+  slug        String              @unique
+  title       String
+  description String
+  metric      GoalMetric
+  targetValue Int
+  xpReward    Int
+  activeDate  DateTime
+  createdAt   DateTime            @default(now())
+  userProgress UserMissionProgress[]
+}
+
+model UserMissionProgress {
+  id          String       @id @default(cuid())
+  userId      String
+  missionId   String
+  progress    Int          @default(0)
+  completedAt DateTime?
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mission     DailyMission @relation(fields: [missionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, missionId])
+}
+
+model Challenge {
+  id          String           @id @default(cuid())
+  slug        String           @unique
+  title       String
+  description String
+  type        ChallengeType
+  rewardXp    Int
+  targetValue Int
+  startsAt    DateTime
+  endsAt      DateTime
+  isFeatured  Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  participants ChallengeEntry[]
+}
+
+model ChallengeEntry {
+  id          String    @id @default(cuid())
+  challengeId String
+  userId      String
+  progress    Int       @default(0)
+  rank        Int?
+  completed   Boolean   @default(false)
+  joinedAt    DateTime  @default(now())
+  challenge   Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([challengeId, userId])
+}
+
+model Post {
+  id            String    @id @default(cuid())
+  userId        String
+  content       String
+  imageData     String?
+  mood          String?
+  likesCount    Int       @default(0)
+  commentsCount Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  comments      Comment[]
+  likes         Like[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Like {
+  id        String   @id @default(cuid())
+  postId    String
+  userId    String
+  createdAt DateTime @default(now())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([postId, userId])
+}
+
+model Follow {
+  id          String   @id @default(cuid())
+  followerId  String
+  followingId String
+  createdAt   DateTime @default(now())
+  follower    User     @relation("following", fields: [followerId], references: [id], onDelete: Cascade)
+  following   User     @relation("followers", fields: [followingId], references: [id], onDelete: Cascade)
+
+  @@unique([followerId, followingId])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  type      NotificationType
+  title     String
+  body      String
+  link      String?
+  readAt    DateTime?
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Streak {
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  current      Int      @default(0)
+  best         Int      @default(0)
+  lastActiveAt DateTime?
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  userId    String
+  token     String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

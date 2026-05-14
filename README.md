@@ -1,301 +1,172 @@
-<<<<<<< HEAD
-# FitForge
+# Fitnity
 
-FitForge is a full-stack, no-equipment fitness web app built for people who cannot go to the gym and still want a serious, motivating training system at home.
+Fitnity is a full-stack modern fitness platform built as a single Next.js App Router project. It ships with authentication, dashboard analytics, workouts, nutrition tracking, AI tools, gamification, social features, progress tracking, PWA support, offline caching, and realistic seeded data.
 
-It includes:
+## Stack
 
-- React + Tailwind frontend
-- Node.js + Express backend
-- MongoDB persistence for logged-in users
-- JWT authentication plus guest mode
-- PWA install support with offline-friendly guest flows
-- 100+ unlocked workout plans
-- Custom workout builder
-- Smart progress tracking, XP, badges, streaks, and user leveling
-- Meal planning
-- Friends, challenges, and separate leaderboards by level
+- Next.js 16 App Router
+- TypeScript
+- Tailwind CSS 4
+- Framer Motion
+- Prisma
+- SQLite for local development
+- PostgreSQL-compatible schema path for production
+- NextAuth credentials auth
+- Zustand
+- Recharts
 
-## Tech stack
+## What’s included
 
-- Frontend: React, React Router, Tailwind CSS, Vite
-- Backend: Node.js, Express, Mongoose
-- Database: MongoDB
-- Authentication: JWT
-- PWA: Manifest + service worker
+- Landing page with hero, stats, testimonials, pricing, FAQ, and CTAs
+- Protected dashboard with calories, streaks, hydration, sleep, XP, charts, missions, and leaderboard
+- Workout system with exercise library, filters, videos, drag-and-drop builder, favorite routines, and workout logging
+- AI lab with workout generation, meal planning, chatbot guidance, and recommendation mode
+- Nutrition tracking with macros, meal plans, water logging, sleep logging, barcode field UI, and Indian food presets
+- Social layer with posts, likes, comments, follows, and profile pages
+- Challenges, XP, achievements, leaderboard, streaks, and mission rewards
+- Progress charts, measurements, transformation gallery, and share-card generation
+- Settings, onboarding, theme switching, browser notifications, install prompt, and offline page
 
-## Folder structure
+## Quick start
 
-```text
-.
-|-- backend
-|   |-- .env.example
-|   |-- package.json
-|   `-- src
-|       |-- app.js
-|       |-- server.js
-|       |-- config
-|       |   |-- db.js
-|       |   `-- env.js
-|       |-- controllers
-|       |   |-- appController.js
-|       |   |-- authController.js
-|       |   |-- leaderboardController.js
-|       |   |-- socialController.js
-|       |   |-- userController.js
-|       |   `-- workoutController.js
-|       |-- middleware
-|       |   |-- auth.js
-|       |   `-- errorHandler.js
-|       |-- models
-|       |   `-- User.js
-|       |-- routes
-|       |   |-- appRoutes.js
-|       |   |-- authRoutes.js
-|       |   |-- leaderboardRoutes.js
-|       |   |-- socialRoutes.js
-|       |   |-- userRoutes.js
-|       |   `-- workoutRoutes.js
-|       |-- scripts
-|       |   `-- seed.js
-|       |-- services
-|       |   `-- userService.js
-|       `-- utils
-|           |-- asyncHandler.js
-|           `-- token.js
-|-- frontend
-|   |-- .env.example
-|   |-- index.html
-|   |-- package.json
-|   |-- postcss.config.js
-|   |-- tailwind.config.js
-|   |-- vite.config.js
-|   |-- public
-|   |   |-- icon.svg
-|   |   |-- manifest.webmanifest
-|   |   `-- sw.js
-|   `-- src
-|       |-- App.jsx
-|       |-- index.css
-|       |-- main.jsx
-|       |-- api
-|       |   `-- client.js
-|       |-- components
-|       |   |-- AppShell.jsx
-|       |   |-- CalendarHeatmap.jsx
-|       |   |-- ExerciseVisual.jsx
-|       |   |-- LeaderboardColumns.jsx
-|       |   |-- ProgressChart.jsx
-|       |   |-- SectionHeader.jsx
-|       |   |-- StatCard.jsx
-|       |   |-- WorkoutCard.jsx
-|       |   `-- WorkoutPlayer.jsx
-|       |-- context
-|       |   |-- AppDataContext.jsx
-|       |   `-- AuthContext.jsx
-|       |-- hooks
-|       |   `-- usePersistentState.js
-|       |-- pages
-|       |   |-- AuthPage.jsx
-|       |   |-- BuilderPage.jsx
-|       |   |-- CalendarPage.jsx
-|       |   |-- DashboardPage.jsx
-|       |   |-- LibraryPage.jsx
-|       |   |-- MealsPage.jsx
-|       |   |-- NotFoundPage.jsx
-|       |   |-- ProgressPage.jsx
-|       |   |-- SessionPage.jsx
-|       |   `-- SocialPage.jsx
-|       `-- utils
-|           |-- fitnessEngine.js
-|           |-- formatters.js
-|           `-- notifications.js
-|-- shared
-|   `-- fitnessData.js
-|-- .gitignore
-|-- package.json
-`-- README.md
-```
-
-## Core product coverage
-
-### User system
-
-- Guest mode with localStorage persistence
-- Signup and login with JWT
-- Logged-in cloud persistence with MongoDB
-- Profile fields for age group, gender, level, goals, and injuries
-
-### Workout system
-
-- 100+ generated no-equipment workouts
-- Age-based, goal-based, women-specific, and injury-support categories
-- 10, 15, 20, 25, 30, 45, and 60 minute durations
-- Step-by-step exercise guidance
-- Exercise timer and rest timer
-- Exercise visuals and optional voice guidance
-
-### Engagement and tracking
-
-- Daily quotes
-- AI-style rule-based workout recommendations
-- Quick start workout
-- Daily challenge mode
-- XP, level-up system, and badges
-- Streak tracking
-- Workout history
-- Weekly and monthly chart views
-- Body progress tracking
-- Goal tracker
-- Calendar habit view
-
-### Social and competition
-
-- Separate leaderboards for Beginner, Intermediate, Pro, and Max
-- Add friends
-- Compare progress
-- Create friend challenges
-- Share progress through Web Share API or clipboard fallback
-
-### Meals and reminders
-
-- Vegetarian and non-vegetarian daily plans
-- Goal-based calories and protein totals
-- Browser notification reminder support
-- Smart inactivity reminder behavior
-
-### Platform and security
-
-- Mobile-first responsive UI
-- Light mode and dark mode
-- PWA manifest and service worker
-- SEO meta tags for:
-  - home workout
-  - no equipment workout
-  - fitness at home
-- Validation, JWT auth, Helmet, and centralized error handling
-
-## Setup
-
-### Requirements
-
-- Node.js 18+
-- npm 9+
-- MongoDB running locally or a MongoDB Atlas URI
-
-### 1. Install dependencies
+1. Install dependencies:
 
 ```bash
 npm install
 ```
 
-### 2. Environment setup
-
-Create these files:
+2. Start the app:
 
 ```bash
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
+npm run dev
 ```
 
-If you are on Windows PowerShell:
+3. Open [http://localhost:3000](http://localhost:3000)
 
-```powershell
-Copy-Item backend/.env.example backend/.env
-Copy-Item frontend/.env.example frontend/.env
-```
+The repo already includes a seeded local SQLite database at `prisma/dev.db`, so the app is alive immediately after install.
 
-Recommended backend values:
+Demo account:
 
-```env
-PORT=5000
-MONGO_URI=mongodb://127.0.0.1:27017/fitforge
-JWT_SECRET=replace-this-with-a-secure-secret
-CLIENT_URL=http://localhost:5173
-```
+- Email: `demo@fitnity.app`
+- Password: `demo12345`
 
-Recommended frontend value:
+## Environment
 
-```env
-VITE_API_URL=http://localhost:5000/api
-```
+Create `.env` from `.env.example` if you want to override defaults.
 
-### 3. Seed sample users
+Important notes:
+
+- Local development works even without setting `NEXTAUTH_SECRET`; the app falls back to a safe local-only dev secret.
+- If `OPENAI_API_KEY` is missing, the AI features return high-quality local mock responses.
+- `DATABASE_URL` defaults cleanly to the local SQLite file workflow.
+
+## Useful scripts
 
 ```bash
-npm run seed
+npm run dev
+npm run lint
+npm run build
+npm run db:push
+npm run db:seed
+npm run db:reset
 ```
 
-The seed script creates sample leaderboard users with this default password:
+## Local database
+
+- Default schema: `prisma/schema.prisma`
+- Default database: `prisma/dev.db`
+- Seed script: `prisma/seed.ts`
+
+If you want to refresh the local demo data:
+
+```bash
+npm run db:reset
+```
+
+## PostgreSQL production path
+
+Prisma requires the schema provider to match the target database, so this repo includes a second production schema:
+
+- Local SQLite: `prisma/schema.prisma`
+- Production PostgreSQL: `prisma/schema.postgresql.prisma`
+
+The Prisma config supports switching schemas through `PRISMA_SCHEMA_PATH`.
+
+## Vercel deployment
+
+1. Push the repo to GitHub.
+2. Import the repo into Vercel.
+3. Add environment variables:
+
+- `DATABASE_URL`
+- `NEXTAUTH_SECRET`
+- `NEXTAUTH_URL`
+- `OPENAI_API_KEY` optional
+- `OPENAI_MODEL` optional
+- `PRISMA_SCHEMA_PATH=prisma/schema.postgresql.prisma`
+
+4. Set the build command to:
+
+```bash
+npm run build
+```
+
+5. Before first production traffic, sync the production schema with:
+
+```bash
+PRISMA_SCHEMA_PATH=prisma/schema.postgresql.prisma npx prisma db push
+```
+
+If you seed production intentionally, run:
+
+```bash
+PRISMA_SCHEMA_PATH=prisma/schema.postgresql.prisma npm run db:seed
+```
+
+## Netlify / Render / other hosts
+
+- Use the same environment variables
+- Point `DATABASE_URL` at PostgreSQL
+- Set `PRISMA_SCHEMA_PATH=prisma/schema.postgresql.prisma`
+- Run `npm run build` as the build command
+- Run `npx prisma db push` with the same `PRISMA_SCHEMA_PATH` before serving traffic
+
+## Project structure
 
 ```text
-FitForge123!
+app/
+  (marketing)/
+  (auth)/
+  (app)/
+  api/
+components/
+  ai/
+  auth/
+  charts/
+  dashboard/
+  landing/
+  layout/
+  nutrition/
+  onboarding/
+  progress/
+  social/
+  ui/
+  workouts/
+lib/
+  actions/
+  ai/
+  auth.ts
+  db.ts
+  gamification.ts
+prisma/
+  schema.prisma
+  schema.postgresql.prisma
+  seed.ts
+public/
 ```
-
-Sample seeded emails include:
-
-- `aarav-blaze@fitforge.app`
-- `maya-pulse@fitforge.app`
-- `noah-grind@fitforge.app`
-- `sara-motion@fitforge.app`
-
-### 4. Run the app
-
-```bash
-npm run dev
-```
-
-Frontend:
-
-- `http://localhost:5173`
-
-Backend:
-
-- `http://localhost:5000`
-
-Health check:
-
-- `http://localhost:5000/api/health`
-
-## Available scripts
-
-Root:
-
-```bash
-npm run dev
-npm run build
-npm run start
-npm run seed
-```
-
-Backend only:
-
-```bash
-npm --prefix backend run dev
-npm --prefix backend run start
-npm --prefix backend run seed
-```
-
-Frontend only:
-
-```bash
-npm --prefix frontend run dev
-npm --prefix frontend run build
-npm --prefix frontend run preview
-```
-
-## Guest mode behavior
-
-- Guest progress is stored in localStorage
-- Closing and reopening the browser keeps guest data
-- Offline guest usage keeps core workout, planner, and progress features usable
 
 ## Notes
 
-- Workout, meal, badge, quote, challenge, and sample-user data are shared from `shared/fitnessData.js`.
-- Logged-in users persist progress, custom workouts, reminders, friends, and challenges in MongoDB.
-- Leaderboards are separated by fitness level and ranked by streak first, then total workouts.
-=======
-# fitforge
-this is website that help you to do workout at home without any equipment 
->>>>>>> d5319b7b11ae34fa268c3c0a87034da86a04cbf4
+- The app is intentionally a single project with Next.js handling both UI and server logic.
+- Social, nutrition, workout, challenge, and progress actions all mutate real Prisma-backed data.
+- Achievement share cards are generated at `/api/share/achievement/[slug]`.
